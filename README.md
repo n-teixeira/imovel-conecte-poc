@@ -149,7 +149,3 @@ imovel-conecte/
 ├── Dockerfile           # Build da aplicação
 └── README.md
 ```
-
-## Licença
-
-Projeto privado — ImovelConecte.
