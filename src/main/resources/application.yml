@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: imovel-conecte
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:mem:imovelconecte;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:}
+    driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: ${JPA_SHOW_SQL:false}
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    listener:
+      simple:
+        acknowledge-mode: auto
+        prefetch: 5
+        default-requeue-rejected: false
+
+# HubSpot OAuth 2.0
+hubspot:
+  oauth:
+    client-id: ${HUBSPOT_CLIENT_ID:}
+    client-secret: ${HUBSPOT_CLIENT_SECRET:}
+    redirect-uri: ${HUBSPOT_REDIRECT_URI:http://localhost:8080/oauth/callback}
+    token-url: https://api.hubapi.com/oauth/v1/token
+    authorize-url: https://app.hubspot.com/oauth/authorize
+    scopes: crm.objects.contacts.read,crm.objects.contacts.write,crm.objects.deals.read,crm.objects.deals.write
+  api:
+    base-url: https://api.hubapi.com
+    webhook:
+      verification-token: ${HUBSPOT_WEBHOOK_VERIFICATION_TOKEN:}
+      secret: ${HUBSPOT_WEBHOOK_SECRET:}
+
+# Idempotência - TTL em minutos para chaves expiradas
+imovelconecte:
+  idempotency:
+    ttl-minutes: ${IDEMPOTENCY_TTL_MINUTES:1440}
+  contingency:
+    max-retries: ${CONTINGENCY_MAX_RETRIES:5}
+    retry-delay-ms: ${CONTINGENCY_RETRY_DELAY_MS:60000}
